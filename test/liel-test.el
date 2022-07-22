@@ -33,7 +33,44 @@
 
 (require 'liel)
 
+(ert-deftest liel-read-token ()
+  (let ((plist '( :escape-char-list (?\\)
+                  :new-token-char-list (?\( ?\))
+                  :end-token-char-list (?\( ?\))
+                  :token-separator-char-list (?\ )
+                  :string-escape-char-list (?\\)
+                  :string-quote-char-alist ((?\" . ?\"))
+                  )))
 
+    (let ((token-plist (liel-read-token plist
+                                        "abc def ghi" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "abc")))
+
+    (let ((token-plist (liel-read-token plist
+                                        "(abc def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "(")))
+
+    (let ((token-plist (liel-read-token plist
+                                        "xyz(abc def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "xyz")))
+
+    (let ((token-plist (liel-read-token plist
+                                        "((abc def ghi))" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "(")))
+
+    (let ((token-plist (liel-read-token plist
+                                        "\\(abc def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "\\(abc")))
+
+    (let ((token-plist (liel-read-token plist
+                                        "ab\\(c def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "ab\\(c")))))
 
 
 (provide 'liel-test)
