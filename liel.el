@@ -90,30 +90,41 @@
             (setq break 'in-token))
            ((memq char string-escape-char-list)
             (setq escape? t)
+            (push char char-list))
+           (t
             (push char char-list))))
+
+         ((and (null char-list)
+               (alist-get char string-quote-char-alist))
+          (push char char-list)
+          (setq string? (alist-get char string-quote-char-alist)))
+
          (escape?
           (push char char-list)
           (setq escape? nil))
+
          ((memq char escape-char-list)
           (push char char-list)
           (setq escape? t))
+
          ((memq char token-separator-char-list)
           (setq break 'out-of-token))
+
          ((and (null char-list)
                (memq char new-token-char-list)
                (memq char end-token-char-list))
           (push char char-list)
           (setq break 'in-token))
-         ((and (null char-list)
+
+         ((and char-list
                (memq char new-token-char-list))
-          (push char char-list))
-         ((memq char new-token-char-list)
           (setq break 'out-of-token))
+
          ((memq char end-token-char-list)
           (push char char-list)
           (setq break 'in-token))
+
          (t
-          (setq string? (alist-get char string-quote-char-alist))
           (push char char-list)))
         (cl-incf count)))
 
