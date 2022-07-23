@@ -28,6 +28,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (defgroup liel ()
   "Lisp interpreter written in Emacs Lisp"
   :group 'lisp
