@@ -68,15 +68,29 @@
                        "\\(abc")))
 
     (let ((token-plist (liel-read-token plist
+                                        "\\ abc def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "\\ abc")))
+
+    (let ((token-plist (liel-read-token plist
                                         "ab\\(c def ghi)" 0)))
       (should (string= (plist-get token-plist :token)
                        "ab\\(c")))
 
+    (let ((token-plist (liel-read-token plist
+                                        "ab\\ c def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "ab\\ c")))
 
+    (let ((token-plist (liel-read-token plist
+                                        "def\"abc\" ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "def")))
     (let ((token-plist (liel-read-token plist
                                         "\"abc\" def ghi)" 0)))
       (should (string= (plist-get token-plist :token)
-                       "abc")))))
+                       "abc"))
+      (should (plist-get token-plist :string?)))))
 
 
 (provide 'liel-test)
