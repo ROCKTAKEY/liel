@@ -36,13 +36,24 @@
   :prefix "liel-"
   :link '(url-link "https://github.com/ROCKTAKEY/liel"))
 
+(defun liel-get-parenthesis-char-alist (plist)
+  (plist-get plist :parenthesis-char-alist))
+
 (defun liel-get-escape-char-list (plist)
   ""
   (plist-get plist :escape-char-list))
 
 (defun liel-get-new-token-char-list (plist)
   ""
-  (plist-get plist :new-token-char-list))
+  (let ((parenthesis-char-alist (liel-get-parenthesis-char-alist plist))
+        (string-quote-char-alist (liel-get-string-quote-char-alist plist)))
+    (cl-remove-duplicates
+     (mapcan
+      (lambda (alist)
+        (mapcan
+         (lambda (arg) (list (car arg) (cdr arg)))
+         alist))
+      (list parenthesis-char-alist string-quote-char-alist)))))
 
 (defun liel-get-token-separator-char-list (plist)
   ""
@@ -50,7 +61,11 @@
 
 (defun liel-get-end-token-char-list (plist)
   ""
-  (plist-get plist :end-token-char-list))
+  (let ((parenthesis-alist (liel-get-parenthesis-char-alist plist)))
+    (cl-remove-duplicates
+     (mapcan
+      (lambda (arg) (list (car arg) (cdr arg)))
+      parenthesis-alist))))
 
 (defun liel-get-string-quote-char-alist (plist)
   ""

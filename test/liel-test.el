@@ -35,8 +35,7 @@
 
 (ert-deftest liel-read-token-symbol ()
   (let ((plist '( :escape-char-list (?\\)
-                  :new-token-char-list (?\( ?\) ?\")
-                  :end-token-char-list (?\( ?\))
+                  :parenthesis-char-alist ((?\( . ?\)))
                   :token-separator-char-list (?\ )
                   :string-escape-char-list (?\\)
                   :string-quote-char-alist ((?\" . ?\"))
