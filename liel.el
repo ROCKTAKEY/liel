@@ -85,8 +85,6 @@
             (push char char-list)
             (setq escape? nil))
            ((eq char string?)
-            (push char char-list)
-            (setq string? nil)
             (setq break 'in-token))
            ((memq char string-escape-char-list)
             (setq escape? t)
@@ -96,7 +94,6 @@
 
          ((and (null char-list)
                (alist-get char string-quote-char-alist))
-          (push char char-list)
           (setq string? (alist-get char string-quote-char-alist)))
 
          (escape?
@@ -131,7 +128,8 @@
     (list :token (apply #'string (reverse char-list))
           :input (if (eq break 'in-token)
                      count
-                   (1- count)))))
+                   (1- count))
+          :string? string?)))
 
 (provide 'liel)
 ;;; liel.el ends here

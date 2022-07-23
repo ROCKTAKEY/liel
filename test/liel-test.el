@@ -70,7 +70,13 @@
     (let ((token-plist (liel-read-token plist
                                         "ab\\(c def ghi)" 0)))
       (should (string= (plist-get token-plist :token)
-                       "ab\\(c")))))
+                       "ab\\(c")))
+
+
+    (let ((token-plist (liel-read-token plist
+                                        "\"abc\" def ghi)" 0)))
+      (should (string= (plist-get token-plist :token)
+                       "abc")))))
 
 
 (provide 'liel-test)
